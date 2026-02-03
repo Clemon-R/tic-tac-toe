@@ -10,7 +10,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true, extensions: [BasicTheme()]),
-      home: const GameView(),
+      home: GameView(),
     );
   }
 }

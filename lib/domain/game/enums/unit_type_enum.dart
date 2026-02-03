@@ -1,0 +1,1 @@
+enum UnitTypeEnum { cross, circle }

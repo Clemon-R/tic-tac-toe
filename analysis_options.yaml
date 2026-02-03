@@ -9,8 +9,13 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:lints/recommended.yaml
 
-plugins:
-  riverpod_lint: 3.1.2
+analyzer:
+  plugins:
+    - custom_lint
+
+custom_lint:
+  rules:
+    riverpod_syntax_error: false
 
 linter:
   # The lint rules applied to this project can be customized in the
