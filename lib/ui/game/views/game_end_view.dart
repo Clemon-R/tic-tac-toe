@@ -47,9 +47,7 @@ class GameEndView extends StatelessWidget {
                   Spacer(),
                   Text("GameOver", style: context.appTheme.gameTitleStyle),
                   Text(
-                    state.winner == state.gameModel.computerPlayer
-                        ? "Looooooser you lost the game"
-                        : "You won the game",
+                    _getGameOverText(context),
                     style: context.appTheme.gameInfoStyle,
                   ),
                   Spacer(),
@@ -67,5 +65,15 @@ class GameEndView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getGameOverText(BuildContext context) {
+    if (state.winner == state.gameModel.computerPlayer) {
+      return "Looooooser you lost the game";
+    }
+    if (state.winner == state.gameModel.humanPlayer) {
+      return "You won the game";
+    }
+    return "The game is tied";
   }
 }

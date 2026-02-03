@@ -65,12 +65,8 @@ class GameState extends _$GameState {
       message: GameMessageEnum.none,
     );
 
-    final isWon = gameService.isWon(currentGameState.turn);
-    if (isWon) {
-      state = GameStateModelGameEnd(
-        gameModel: gameService.currentGame,
-        winner: currentGameState.turn,
-      );
+    final shouldStop = _shouldStopTheGame(currentGameState, gameService);
+    if (shouldStop) {
       return;
     }
 
@@ -94,12 +90,8 @@ class GameState extends _$GameState {
       return;
     }
 
-    final isWon = gameService.isWon(currentGameState.turn);
-    if (isWon) {
-      state = GameStateModelGameEnd(
-        gameModel: gameService.currentGame,
-        winner: currentGameState.turn,
-      );
+    final shouldStop = _shouldStopTheGame(currentGameState, gameService);
+    if (shouldStop) {
       return;
     }
 
@@ -109,5 +101,28 @@ class GameState extends _$GameState {
       turn: nextTurn,
       message: GameMessageEnum.none,
     );
+  }
+
+  bool _shouldStopTheGame(
+    GameStateModelGameStarted currentGameState,
+    GameService gameService,
+  ) {
+    final isWon = gameService.isWon(currentGameState.turn);
+    if (isWon) {
+      state = GameStateModelGameEnd(
+        gameModel: currentGameState.gameModel,
+        winner: currentGameState.turn,
+      );
+      return true;
+    }
+    final isTied = gameService.isTied();
+    if (isTied) {
+      state = GameStateModelGameEnd(
+        gameModel: currentGameState.gameModel,
+        winner: null,
+      );
+      return true;
+    }
+    return false;
   }
 }

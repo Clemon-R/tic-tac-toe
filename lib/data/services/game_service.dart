@@ -55,6 +55,11 @@ class GameService {
     }
   }
 
+  bool isTied() {
+    return currentGame.unitPositions.length ==
+        Environment.gameGridSize * Environment.gameGridSize;
+  }
+
   bool isWon(PlayerModel player) {
     for (final entry in currentGame.unitPositions.entries) {
       final playerModel = entry.value;

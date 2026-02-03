@@ -33,7 +33,7 @@ class GameStateModelGameStarted extends GameStateModel {
 
 class GameStateModelGameEnd extends GameStateModel {
   final GameModel gameModel;
-  final PlayerModel winner;
+  final PlayerModel? winner;
 
   GameStateModelGameEnd({required this.gameModel, required this.winner});
 }
