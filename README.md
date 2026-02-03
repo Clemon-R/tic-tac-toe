@@ -26,3 +26,8 @@ faciliter les évolutions tout en gardant un flux UI réactif et prévisible.
 - Tests complets (service de jeu + provider + vues).
 - Historique des parties, statistiques et rejouabilité.
 - Améliorations UX (haptique, thèmes, scorings).
+
+## Captures d’écran
+![Ecran initial](images/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-02-03%20at%2015.22.30.png)
+![Ecran de jeu](images/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-02-03%20at%2015.22.35.png)
+![Ecran tour ordinateur](images/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-02-03%20at%2015.22.39.png)
