@@ -1,16 +1,28 @@
-# tictactoe
+# TicTacToe — Note synthétique
 
-A new Flutter project.
+## Approche générale adoptée
+L’objectif est de livrer un jeu de TicTacToe simple, clair et robuste. L’approche
+privilégie une séparation nette entre la logique de jeu et l’interface, afin de
+faciliter les évolutions tout en gardant un flux UI réactif et prévisible.
 
-## Getting Started
+## Choix d’architecture et de state management
+- Architecture Clean : `data` (services, repos, data sources, adapters), `ui` (views, providers), `domain` (entité, use cases, services), .
+- La logique métier est portée par un service dédié, consommé par un provider.
+- Le state management est centralisé dans un provider qui expose un modèle de
+  state immuable aux vues, favorisant un rendu déterministe et des tests simples.
 
-This project is a starting point for a Flutter application.
+## Ce qui est implémenté
+- Jeu complet de TicTacToe avec tour par tour.
+- Détection des conditions de victoire et d’égalité.
+- Écrans/états principaux : initial, en cours, fin de partie.
 
-A few resources to get you started if this is your first Flutter project:
+## Ce qui n’a pas été traité (manque de temps)
+- Ajout d’un mode multi local.
+- Polish UI avancés.
+- Couverture de tests unitaires et d’intégration.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Ce qui aurait été ajouté ou amélioré avec plus de temps
+- Mode IA avec plusieurs niveaux de difficulté / différentes IA.
+- Tests complets (service de jeu + provider + vues).
+- Historique des parties, statistiques et rejouabilité.
+- Améliorations UX (haptique, thèmes, scorings).
