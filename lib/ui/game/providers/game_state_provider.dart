@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tictactoe/data/services/game_service.dart';
+import 'package:tictactoe/domain/game/enums/unit_type_enum.dart';
+import 'package:tictactoe/ui/game/enums/game_message_enum.dart';
 import 'package:tictactoe/ui/game/models/game_state_model.dart';
 
 part 'game_state_provider.g.dart';
@@ -16,11 +18,18 @@ class GameState extends _$GameState {
 
   void startGame() {
     final gameService = ref.read(gameServiceProvider);
-    final gameModel = gameService.createNewGame();
+    final humanUnitType = Random().nextBool()
+        ? UnitTypeEnum.cross
+        : UnitTypeEnum.circle;
+    final gameModel = gameService.createNewGame(humanUnitType);
     final turn = Random().nextBool()
         ? gameService.currentGame.humanPlayer
         : gameService.currentGame.computerPlayer;
-    state = GameStateModelGameStarted(gameModel: gameModel, turn: turn);
+    state = GameStateModelGameStarted(
+      gameModel: gameModel,
+      turn: turn,
+      message: GameMessageEnum.none,
+    );
 
     _startComputerTurn();
   }
@@ -33,8 +42,10 @@ class GameState extends _$GameState {
     final isHumanTurn =
         currentGameState.turn == currentGameState.gameModel.humanPlayer;
     if (!isHumanTurn) {
+      state = currentGameState.copyWith(message: GameMessageEnum.invalidMove);
       return;
     }
+
     final gameService = ref.read(gameServiceProvider);
     gameService.selectCell(
       currentGameState.gameModel.humanPlayer,
@@ -45,10 +56,21 @@ class GameState extends _$GameState {
         currentGameState.turn == currentGameState.gameModel.humanPlayer
         ? currentGameState.gameModel.computerPlayer
         : currentGameState.gameModel.humanPlayer;
+
     state = currentGameState.copyWith(
       gameModel: gameService.currentGame,
       turn: nextTurn,
+      message: GameMessageEnum.none,
     );
+
+    final isWon = gameService.isWon(currentGameState.turn);
+    if (isWon) {
+      state = GameStateModelGameEnd(
+        gameModel: gameService.currentGame,
+        winner: currentGameState.turn,
+      );
+      return;
+    }
 
     _startComputerTurn();
   }
@@ -63,15 +85,27 @@ class GameState extends _$GameState {
     if (!isComputerTurn) {
       return;
     }
+
     final gameService = ref.read(gameServiceProvider);
     final success = await gameService.launchComputerMove();
     if (!success) {
       return;
     }
+
+    final isWon = gameService.isWon(currentGameState.turn);
+    if (isWon) {
+      state = GameStateModelGameEnd(
+        gameModel: gameService.currentGame,
+        winner: currentGameState.turn,
+      );
+      return;
+    }
+
     final nextTurn = currentGameState.gameModel.humanPlayer;
     state = currentGameState.copyWith(
       gameModel: gameService.currentGame,
       turn: nextTurn,
+      message: GameMessageEnum.none,
     );
   }
 }
