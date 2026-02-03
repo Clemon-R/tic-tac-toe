@@ -18,6 +18,8 @@ class BasicTheme extends ThemeExtension<BasicTheme> {
       ),
     ],
   );
+  TextStyle get gameInfoStyle =>
+      TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: titleColor);
   TextStyle get buttonTextStyle =>
       TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: titleColor);
 

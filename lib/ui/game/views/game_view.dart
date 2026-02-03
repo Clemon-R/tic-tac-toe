@@ -17,7 +17,8 @@ class GameView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
     final shouldTranslate =
-        _previousGameState != null && _previousGameState != gameState;
+        _previousGameState != null &&
+        _previousGameState.runtimeType != gameState.runtimeType;
     if (shouldTranslate) {
       final previousGameView = _buildGameView(
         context,
@@ -47,6 +48,9 @@ class GameView extends ConsumerWidget {
       ),
       const (GameStateModelGameStarted) => GameStartedView(
         state: gameState as GameStateModelGameStarted,
+        onSelectCell: (posX, posY) {
+          ref.read(gameStateProvider.notifier).selectCell(posX, posY);
+        },
       ),
       _ => Container(),
     };
