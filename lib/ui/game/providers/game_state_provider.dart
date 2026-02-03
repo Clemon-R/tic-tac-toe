@@ -28,7 +28,9 @@ class GameState extends _$GameState {
     state = GameStateModelGameStarted(
       gameModel: gameModel,
       turn: turn,
-      message: GameMessageEnum.none,
+      message: turn == gameService.currentGame.humanPlayer
+          ? GameMessageEnum.firstTurnForYou
+          : GameMessageEnum.firstTurnForComputer,
     );
 
     _startComputerTurn();

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:tictactoe/domain/game/enums/unit_type_enum.dart';
 import 'package:tictactoe/domain/game/models/game_model.dart';
 import 'package:tictactoe/domain/game/models/player_model.dart';
-import 'package:tictactoe/env/themes/basic_theme.dart';
 import 'package:tictactoe/ui/components/common/app_button.dart';
 import 'package:tictactoe/ui/components/common/app_header.dart';
 import 'package:tictactoe/ui/components/layout/app_layout.dart';
@@ -61,6 +60,7 @@ class _GameInitialViewState extends State<GameInitialView>
                 child: SizedBox(
                   child: GameGrid(
                     size: 3,
+                    isAnimated: false,
                     gameModel: GameModel(
                       humanPlayer: PlayerModel(unitType: UnitTypeEnum.cross),
                       computerPlayer: PlayerModel(

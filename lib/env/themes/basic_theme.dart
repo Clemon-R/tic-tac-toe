@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class BasicTheme extends ThemeExtension<BasicTheme> {
   Color get titleColor => Colors.black;
+  Color get busyColor => Colors.grey;
 
   Radius get radius => Radius.circular(10);
   double get horizontalPadding => 20;

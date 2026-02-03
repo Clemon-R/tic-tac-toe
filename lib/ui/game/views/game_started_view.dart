@@ -15,6 +15,8 @@ class GameStartedView extends StatelessWidget {
     required this.onSelectCell,
   });
 
+  bool get isHumanTurn => state.turn == state.gameModel.humanPlayer;
+
   @override
   Widget build(BuildContext context) {
     return AppLayout(
@@ -38,6 +40,7 @@ class GameStartedView extends StatelessWidget {
         horizontal: context.appTheme.horizontalPadding,
       ),
       decoration: BoxDecoration(
+        color: isHumanTurn ? null : context.appTheme.busyColor,
         border: Border.all(color: Colors.black, width: 3),
         borderRadius: BorderRadius.circular(context.appTheme.radius.x),
       ),
@@ -57,21 +60,14 @@ class GameStartedView extends StatelessWidget {
                 style: context.appTheme.gameInfoStyle,
               ),
               Text(
-                state.turn == state.gameModel.humanPlayer
-                    ? "It's your turn"
-                    : "It's the computer's turn",
+                isHumanTurn ? "It's your turn" : "It's the computer's turn",
                 style: context.appTheme.gameInfoStyle,
               ),
             ],
           ),
           AppLoading(
-            isAnimated: state.turn != state.gameModel.humanPlayer,
-            child: Icon(
-              state.turn == state.gameModel.humanPlayer
-                  ? Icons.person
-                  : Icons.computer,
-              size: 32,
-            ),
+            isAnimated: !isHumanTurn,
+            child: Icon(isHumanTurn ? Icons.person : Icons.computer, size: 32),
           ),
         ],
       ),

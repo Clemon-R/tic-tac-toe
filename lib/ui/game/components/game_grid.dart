@@ -4,17 +4,34 @@ import 'package:tictactoe/domain/game/models/player_model.dart';
 import 'package:tictactoe/env/themes/basic_theme.dart';
 import 'package:tictactoe/domain/game/models/game_model.dart';
 
-class GameGrid extends StatelessWidget {
+class GameGrid extends StatefulWidget {
   final int size;
   final GameModel gameModel;
   final void Function(int posX, int posY) onTap;
-
+  final bool isAnimated;
   const GameGrid({
     super.key,
     required this.size,
     required this.gameModel,
     required this.onTap,
+    this.isAnimated = true,
   });
+
+  @override
+  State<GameGrid> createState() => _GameGridState();
+}
+
+class _GameGridState extends State<GameGrid> with TickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+  )..reverse(from: 1);
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +51,7 @@ class GameGrid extends StatelessWidget {
                 final offset = details.localPosition;
                 final x = offset.dx;
                 final y = offset.dy;
-                final gridStep = gridSize / size;
+                final gridStep = gridSize / widget.size;
                 final offsetX = x % gridStep;
                 final offsetY = y % gridStep;
                 final shouldNotTakeIntoAccount =
@@ -47,21 +64,29 @@ class GameGrid extends StatelessWidget {
                 }
                 final posX = x ~/ gridStep;
                 final posY = y ~/ gridStep;
-                onTap(posX, posY);
+                widget.onTap(posX, posY);
               },
-              child: CustomPaint(
-                size: Size.square(gridSize),
-                painter: GameGridBackgroundPainter(
-                  radius: context.appTheme.radius,
-                  size: size,
-                  lineOffset: context.appTheme.horizontalPadding,
-                ),
-                foregroundPainter: GameGridPlayerPainter(
-                  unitPositions: gameModel.unitPositions,
-                  size: size,
-                  lineOffset: context.appTheme.horizontalPadding,
-                ),
-                child: const SizedBox.expand(),
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return CustomPaint(
+                    size: Size.square(gridSize),
+                    painter: GameGridBackgroundPainter(
+                      radius: context.appTheme.radius,
+                      size: widget.size,
+                      lineOffset: context.appTheme.horizontalPadding,
+                      progress: widget.isAnimated
+                          ? _animationController.value
+                          : 0,
+                    ),
+                    foregroundPainter: GameGridPlayerPainter(
+                      unitPositions: widget.gameModel.unitPositions,
+                      size: widget.size,
+                      lineOffset: context.appTheme.horizontalPadding,
+                    ),
+                    child: const SizedBox.expand(),
+                  );
+                },
               ),
             ),
           );
@@ -75,11 +100,13 @@ class GameGridBackgroundPainter extends CustomPainter {
   final Radius radius;
   final double lineOffset;
   final int size;
+  final double progress;
 
   GameGridBackgroundPainter({
     required this.radius,
     required this.size,
     required this.lineOffset,
+    required this.progress,
   });
   @override
   void paint(Canvas canvas, Size areaSize) {
@@ -93,15 +120,17 @@ class GameGridBackgroundPainter extends CustomPainter {
 
     final heightStep = height / size;
     final widthStep = width / size;
+    final middleGrid = width / 2;
     for (var i = 1; i < size; i++) {
+      final offset = (middleGrid - lineOffset) * progress;
       canvas.drawLine(
-        Offset(lineOffset, i * heightStep),
-        Offset(width - lineOffset, i * heightStep),
+        Offset(lineOffset + offset, i * heightStep),
+        Offset(width - lineOffset - offset, i * heightStep),
         paint,
       );
       canvas.drawLine(
-        Offset(i * widthStep, lineOffset),
-        Offset(i * widthStep, height - lineOffset),
+        Offset(i * widthStep, lineOffset + offset),
+        Offset(i * widthStep, height - lineOffset - offset),
         paint,
       );
     }
@@ -109,7 +138,7 @@ class GameGridBackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return oldDelegate != this;
   }
 
   @override

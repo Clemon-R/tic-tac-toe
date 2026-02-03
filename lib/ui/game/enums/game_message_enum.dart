@@ -1,9 +1,8 @@
 enum GameMessageEnum {
   none(""),
   invalidMove("You can't play this turn"),
-  gameWon("You won the game"),
-  gameLost("You lost the game"),
-  gameTied("The game is tied");
+  firstTurnForYou("You begin the game"),
+  firstTurnForComputer("The computer begins the game");
 
   final String content;
 
