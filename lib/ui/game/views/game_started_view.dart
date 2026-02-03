@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe/env/themes/basic_theme.dart';
 import 'package:tictactoe/ui/components/common/app_header.dart';
+import 'package:tictactoe/ui/components/common/app_loading.dart';
 import 'package:tictactoe/ui/components/layout/app_layout.dart';
 import 'package:tictactoe/ui/game/components/game_grid.dart';
 import 'package:tictactoe/ui/game/models/game_state_model.dart';
@@ -44,19 +45,33 @@ class GameStartedView extends StatelessWidget {
         horizontal: context.appTheme.horizontalPadding,
         vertical: context.appTheme.horizontalPadding,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "You are the ${state.gameModel.humanPlayer.unitType.name}",
-            style: context.appTheme.gameInfoStyle,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "You are the ${state.gameModel.humanPlayer.unitType.name}",
+                style: context.appTheme.gameInfoStyle,
+              ),
+              Text(
+                state.turn == state.gameModel.humanPlayer
+                    ? "It's your turn"
+                    : "It's the computer's turn",
+                style: context.appTheme.gameInfoStyle,
+              ),
+            ],
           ),
-          Text(
-            state.turn == state.gameModel.humanPlayer
-                ? "It's your turn"
-                : "It's the computer's turn",
-            style: context.appTheme.gameInfoStyle,
+          AppLoading(
+            isAnimated: state.turn != state.gameModel.humanPlayer,
+            child: Icon(
+              state.turn == state.gameModel.humanPlayer
+                  ? Icons.person
+                  : Icons.computer,
+              size: 32,
+            ),
           ),
         ],
       ),
